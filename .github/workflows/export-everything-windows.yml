@@ -1,0 +1,55 @@
+name: Export Everything (Windows)
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/tools/exportEverything.ts'
+      - 'src/utils/exportEverything.ts'
+      - 'src/utils/zip.ts'
+      - 'tests/utils/exportEverything.test.ts'
+      - 'tests/utils/zip.test.ts'
+      - 'tests/tools/tools.test.ts'
+      - 'tests/config/ConfigWatcher.test.ts'
+      - 'tests/tools/screenshot.test.ts'
+      - '.github/workflows/export-everything-windows.yml'
+
+jobs:
+  run-tests:
+    name: Full suite on windows-latest
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          cache: npm
+          node-version: 22
+
+      - name: Install and sync dependencies
+        shell: bash
+        run: npm run sync
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: true
+
+      - name: Install browser
+        shell: bash
+        run: npx puppeteer browsers install chrome
+
+      - name: Build
+        run: npm run build
+        env:
+          NODE_OPTIONS: '--max_old_space_size=4096'
+
+      - name: Run full suite
+        shell: bash
+        run: npm run test:no-build -- --test-concurrency=1
