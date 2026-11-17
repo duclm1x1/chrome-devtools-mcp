@@ -126,24 +126,29 @@ describe('ConfigWatcher', () => {
     sinon.assert.notCalled(onChange);
   });
 
-  it('follows symlinks to the real config file', {
-    skip: process.platform === 'win32' ?
-        'Windows requires Developer Mode or admin rights to create file symlinks' :
-        false,
-  }, async () => {
-    using dir = createTempDir('cd4a-watcher-');
-    using linkDir = createTempDir('cd4a-link-');
-    const configPath = writeConfig(dir.path);
-    const linkPath = path.join(linkDir.path, 'cd4a.config.json');
-    fs.symlinkSync(configPath, linkPath);
-    const onChange = sinon.stub().resolves();
-    using watcher = await startWatcher(linkPath, onChange);
+  it(
+    'follows symlinks to the real config file',
+    {
+      skip:
+        process.platform === 'win32'
+          ? 'Windows requires Developer Mode or admin rights to create file symlinks'
+          : false,
+    },
+    async () => {
+      using dir = createTempDir('cd4a-watcher-');
+      using linkDir = createTempDir('cd4a-link-');
+      const configPath = writeConfig(dir.path);
+      const linkPath = path.join(linkDir.path, 'cd4a.config.json');
+      fs.symlinkSync(configPath, linkPath);
+      const onChange = sinon.stub().resolves();
+      using watcher = await startWatcher(linkPath, onChange);
 
-    fs.writeFileSync(configPath, '{"headless": true}');
-    await waitForCall(onChange);
+      fs.writeFileSync(configPath, '{"headless": true}');
+      await waitForCall(onChange);
 
-    sinon.assert.calledOnceWithExactly(onChange, '{"headless": true}');
-  });
+      sinon.assert.calledOnceWithExactly(onChange, '{"headless": true}');
+    },
+  );
 
   it('does not call onChange if the content did not change', async () => {
     using dir = createTempDir('cd4a-watcher-');

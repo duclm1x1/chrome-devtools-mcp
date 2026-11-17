@@ -231,49 +231,54 @@ describe('screenshot', () => {
   });
 
   describe('browser_take_screenshot', () => {
-    it('omitBackground preserves transparency and CSS backgrounds without persisting', {
-      skip: process.platform === 'win32' ?
-          'Screenshot default background is platform/theme dependent on Windows' :
-          false,
-    }, async () => {
-      await withMcpContext(async (response, context) => {
-        const page = context.getSelectedMcpPage();
-        await page.pptrPage.setViewport({width: 40, height: 40});
-        await page.pptrPage.setContent(
-          '<style>body{margin:0}div{width:20px;height:40px;background:rgb(15,23,42)}</style><div><canvas width="20" height="40"></canvas></div>',
-        );
-        for (const omitBackground of [true, false]) {
-          await screenshotTool.handler(
-            {params: {format: 'png', omitBackground}, page},
-            response,
-            context,
+    it(
+      'omitBackground preserves transparency and CSS backgrounds without persisting',
+      {
+        skip:
+          process.platform === 'win32'
+            ? 'Screenshot default background is platform/theme dependent on Windows'
+            : false,
+      },
+      async () => {
+        await withMcpContext(async (response, context) => {
+          const page = context.getSelectedMcpPage();
+          await page.pptrPage.setViewport({width: 40, height: 40});
+          await page.pptrPage.setContent(
+            '<style>body{margin:0}div{width:20px;height:40px;background:rgb(15,23,42)}</style><div><canvas width="20" height="40"></canvas></div>',
           );
-          const capture = response.images.at(-1);
-          assert.ok(capture);
-          const pixels = await page.pptrPage.evaluate(async data => {
-            const image = new Image();
-            image.src = 'data:image/png;base64,' + data;
-            await image.decode();
-            const canvas = document.createElement('canvas');
-            canvas.width = 40;
-            canvas.height = 40;
-            const ctx = canvas.getContext('2d');
-            if (!ctx) {
-              throw new Error('No canvas context');
-            }
-            ctx.drawImage(image, 0, 0);
-            return [
-              Array.from(ctx.getImageData(5, 5, 1, 1).data),
-              Array.from(ctx.getImageData(30, 5, 1, 1).data),
-            ];
-          }, capture.data);
-          assert.deepStrictEqual(pixels, [
-            [15, 23, 42, 255],
-            omitBackground ? [0, 0, 0, 0] : [255, 255, 255, 255],
-          ]);
-        }
-      });
-    });
+          for (const omitBackground of [true, false]) {
+            await screenshotTool.handler(
+              {params: {format: 'png', omitBackground}, page},
+              response,
+              context,
+            );
+            const capture = response.images.at(-1);
+            assert.ok(capture);
+            const pixels = await page.pptrPage.evaluate(async data => {
+              const image = new Image();
+              image.src = 'data:image/png;base64,' + data;
+              await image.decode();
+              const canvas = document.createElement('canvas');
+              canvas.width = 40;
+              canvas.height = 40;
+              const ctx = canvas.getContext('2d');
+              if (!ctx) {
+                throw new Error('No canvas context');
+              }
+              ctx.drawImage(image, 0, 0);
+              return [
+                Array.from(ctx.getImageData(5, 5, 1, 1).data),
+                Array.from(ctx.getImageData(30, 5, 1, 1).data),
+              ];
+            }, capture.data);
+            assert.deepStrictEqual(pixels, [
+              [15, 23, 42, 255],
+              omitBackground ? [0, 0, 0, 0] : [255, 255, 255, 255],
+            ]);
+          }
+        });
+      },
+    );
 
     it('with default options', async () => {
       await withMcpContext(async (response, context) => {
