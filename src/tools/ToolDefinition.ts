@@ -16,6 +16,7 @@ import type {
 } from '../processors/HeapSnapshotManager.js';
 import type {McpPage} from '../McpPage.js';
 import type {Logpoint, LogpointOptions} from '../LogpointManager.js';
+import type {UncaughtError} from '../collectors/PageCollector.js';
 import type {DevToolsCommentBridge} from '../devtools/DevToolsCommentBridge.js';
 import type {CssFormatterOptions} from '../formatters/CssFormatter.js';
 import type {
@@ -44,6 +45,8 @@ import {
   type Flags,
   type Protocol,
   type Page,
+  type ConsoleMessage,
+  type HTTPRequest,
   type RunnerResult,
   type WebMCPTool,
 } from '../third_party/index.js';
@@ -351,6 +354,7 @@ export type SupportedExtensions =
   | '.html'
   | '.txt'
   | '.csv'
+  | '.zip'
   | '.gz';
 
 /**
@@ -519,6 +523,10 @@ export type ContextPage = Readonly<{
   init(options?: {emulateFocus?: boolean}): Promise<void>;
   getAXNodeByUid(uid: string): TextSnapshotNode | undefined;
   getElementByUid(uid: string): Promise<ElementHandle<Element>>;
+  getNetworkRequests(includePreservedRequests?: boolean): HTTPRequest[];
+  getConsoleData(
+    includePreservedMessages?: boolean,
+  ): Array<ConsoleMessage | Error | DevTools.AggregatedIssue | UncaughtError>;
   getMatchedStylesForUid(uid: string): Promise<MatchedStyles>;
   configureWebAuthn(
     config: WebAuthnAuthenticatorConfig,

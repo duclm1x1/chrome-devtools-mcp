@@ -11,6 +11,7 @@ import * as commentsTools from './comments.js';
 import * as consoleTools from './console.js';
 import * as cssTools from './css.js';
 import * as emulationTools from './emulation.js';
+import * as exportEverythingTools from './exportEverything.js';
 import * as extensionTools from './extensions.js';
 import * as inputTools from './input.js';
 import * as lighthouseTools from './lighthouse.js';
@@ -36,6 +37,7 @@ export const createTools = (args: ParsedArguments): AnyToolDefinition[] => {
     ...Object.values(consoleTools),
     ...Object.values(cssTools),
     ...Object.values(emulationTools),
+    ...Object.values(exportEverythingTools),
     ...Object.values(extensionTools),
     ...Object.values(inputTools),
     ...Object.values(lighthouseTools),

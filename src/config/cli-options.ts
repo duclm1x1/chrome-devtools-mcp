@@ -583,6 +583,90 @@ export const commands: Commands = {
       },
     },
   },
+  export_everything: {
+    description:
+      'Writes a complete local archive of the inspected page: HAR with response bodies, cookies (Chrome/J2TEAM/Netscape), live DOM, MHTML snapshot, console, storage, screenshots and image/font/media assets. Returns the saved ZIP path. Everything is read from the MCP network/console collectors and CDP; no network upload is performed.',
+    category: 'Debugging',
+    args: {
+      pageId: {
+        name: 'pageId',
+        type: 'number',
+        description: 'Targets a specific page by ID.',
+        required: true,
+        positional: true,
+      },
+      filePath: {
+        name: 'filePath',
+        type: 'string',
+        description:
+          'Absolute path, or a path relative to the current working directory, for the ZIP archive. Defaults to export-everything.zip.',
+        required: false,
+        positional: false,
+      },
+      includeAllCookies: {
+        name: 'includeAllCookies',
+        type: 'boolean',
+        description:
+          'Export every cookie in the browser profile instead of only the inspected site and its subdomains.',
+        required: false,
+        positional: false,
+        default: false,
+      },
+      includeBodies: {
+        name: 'includeBodies',
+        type: 'boolean',
+        description:
+          'Include response bodies in the HAR and recover asset files from them. Disable to reduce archive size.',
+        required: false,
+        positional: false,
+        default: true,
+      },
+      includeAssets: {
+        name: 'includeAssets',
+        type: 'boolean',
+        description:
+          'Write images, fonts, audio/video and PDFs to assets/ inside the archive. Requires includeBodies.',
+        required: false,
+        positional: false,
+        default: true,
+      },
+      includeStorage: {
+        name: 'includeStorage',
+        type: 'boolean',
+        description:
+          'Include localStorage, sessionStorage, IndexedDB (up to 200 rows per store) and CacheStorage keys.',
+        required: false,
+        positional: false,
+        default: true,
+      },
+      includeScreenshots: {
+        name: 'includeScreenshots',
+        type: 'boolean',
+        description: 'Include viewport and full-page PNG screenshots.',
+        required: false,
+        positional: false,
+        default: true,
+      },
+      maxAssetBytes: {
+        name: 'maxAssetBytes',
+        type: 'integer',
+        description:
+          'Maximum size of a single asset written to assets/. Defaults to 33554432 bytes.',
+        required: false,
+        positional: false,
+        default: 33554432,
+      },
+      maxTotalBodyBytes: {
+        name: 'maxTotalBodyBytes',
+        type: 'integer',
+        description:
+          'Maximum combined response-body bytes included in the HAR. Defaults to 536870912 bytes.',
+        required: false,
+        positional: false,
+        default: 536870912,
+      },
+    },
+  },
   fill: {
     description:
       'Type text into an input, text area or select an option from a <select> element.',

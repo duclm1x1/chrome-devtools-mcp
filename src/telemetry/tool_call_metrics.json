@@ -1463,5 +1463,46 @@
         "argType": "string"
       }
     ]
+  },
+  {
+    "name": "export_everything",
+    "args": [
+      {
+        "name": "page_id",
+        "argType": "number"
+      },
+      {
+        "name": "file_path_length",
+        "argType": "number"
+      },
+      {
+        "name": "include_all_cookies",
+        "argType": "boolean"
+      },
+      {
+        "name": "include_bodies",
+        "argType": "boolean"
+      },
+      {
+        "name": "include_assets",
+        "argType": "boolean"
+      },
+      {
+        "name": "include_storage",
+        "argType": "boolean"
+      },
+      {
+        "name": "include_screenshots",
+        "argType": "boolean"
+      },
+      {
+        "name": "max_asset_bytes",
+        "argType": "number"
+      },
+      {
+        "name": "max_total_body_bytes",
+        "argType": "number"
+      }
+    ]
   }
 ]

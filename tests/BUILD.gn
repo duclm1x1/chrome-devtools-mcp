@@ -110,6 +110,7 @@ ts_library("tests") {
     "utils/bytes.test.ts",
     "utils/check-for-updates.test.ts",
     "utils/errorHandling.test.ts",
+    "utils/exportEverything.test.ts",
     "utils/files.test.ts",
     "utils/id.test.ts",
     "utils/keyboard.test.ts",
@@ -121,6 +122,7 @@ ts_library("tests") {
     "utils/text.test.ts",
     "utils/timeout.test.ts",
     "utils/url.test.ts",
+    "utils/zip.test.ts",
   ]
 
   ts_deps = [

@@ -226,6 +226,7 @@ ts_library("mcp_lib") {
     "tools/console.ts",
     "tools/css.ts",
     "tools/emulation.ts",
+    "tools/exportEverything.ts",
     "tools/extensions.ts",
     "tools/input.ts",
     "tools/lighthouse.ts",
@@ -252,6 +253,7 @@ ts_library("mcp_lib") {
     "utils/check-for-updates.ts",
     "utils/disclaimers.ts",
     "utils/errorHandling.ts",
+    "utils/exportEverything.ts",
     "utils/files.ts",
     "utils/id.ts",
     "utils/keyboard.ts",
@@ -264,6 +266,7 @@ ts_library("mcp_lib") {
     "utils/text.ts",
     "utils/timeout.ts",
     "utils/url.ts",
+    "utils/zip.ts",
     "version.ts",
   ]
 

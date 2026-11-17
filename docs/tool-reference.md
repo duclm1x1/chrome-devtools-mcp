@@ -30,8 +30,9 @@
 - **[Network](#network)** (2 tools)
   - [`get_network_request`](#get_network_request)
   - [`list_network_requests`](#list_network_requests)
-- **[Debugging](#debugging)** (10 tools)
+- **[Debugging](#debugging)** (11 tools)
   - [`evaluate_script`](#evaluate_script)
+  - [`export_everything`](#export_everything)
   - [`get_console_message`](#get_console_message)
   - [`get_css_styles`](#get_css_styles)
   - [`lighthouse_audit`](#lighthouse_audit)
@@ -402,6 +403,24 @@
 - **serviceWorkerId** (string) _(optional)_: The optional service worker id to evaluate the script in. If provided, 'pageId' should be omitted. Note: 'args' (element UIDs) cannot be used when evaluating in a service worker.
 - **sourcePath** (string) _(optional)_: The absolute or relative path to a JavaScript file on the MCP server's local filesystem. Provide either this or function, but not both.
 - **waitForStableDom** (boolean) _(optional)_: Whether to wait for the DOM to settle. Pass false if the script only reads data. Defaults to true.
+
+---
+
+### `export_everything`
+
+**Description:** Writes a complete local archive of the inspected page: HAR with response bodies, cookies (Chrome/J2TEAM/Netscape), live DOM, MHTML snapshot, console, storage, screenshots and image/font/media assets. Returns the saved ZIP path. Everything is read from the MCP network/console collectors and CDP; no network upload is performed.
+
+**Parameters:**
+
+- **pageId** (number) **(required)**: Targets a specific page by ID.
+- **filePath** (string) _(optional)_: Absolute path, or a path relative to the current working directory, for the ZIP archive. Defaults to export-everything.zip.
+- **includeAllCookies** (boolean) _(optional)_: Export every cookie in the browser profile instead of only the inspected site and its subdomains.
+- **includeAssets** (boolean) _(optional)_: Write images, fonts, audio/video and PDFs to assets/ inside the archive. Requires includeBodies.
+- **includeBodies** (boolean) _(optional)_: Include response bodies in the HAR and recover asset files from them. Disable to reduce archive size.
+- **includeScreenshots** (boolean) _(optional)_: Include viewport and full-page PNG screenshots.
+- **includeStorage** (boolean) _(optional)_: Include localStorage, sessionStorage, IndexedDB (up to 200 rows per store) and CacheStorage keys.
+- **maxAssetBytes** (integer) _(optional)_: Maximum size of a single asset written to assets/. Defaults to 33554432 bytes.
+- **maxTotalBodyBytes** (integer) _(optional)_: Maximum combined response-body bytes included in the HAR. Defaults to 536870912 bytes.
 
 ---
 
