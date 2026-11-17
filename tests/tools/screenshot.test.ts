@@ -231,7 +231,11 @@ describe('screenshot', () => {
   });
 
   describe('browser_take_screenshot', () => {
-    it('omitBackground preserves transparency and CSS backgrounds without persisting', async () => {
+    it('omitBackground preserves transparency and CSS backgrounds without persisting', {
+      skip: process.platform === 'win32' ?
+          'Screenshot default background is platform/theme dependent on Windows' :
+          false,
+    }, async () => {
       await withMcpContext(async (response, context) => {
         const page = context.getSelectedMcpPage();
         await page.pptrPage.setViewport({width: 40, height: 40});

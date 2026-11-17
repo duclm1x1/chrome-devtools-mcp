@@ -126,7 +126,11 @@ describe('ConfigWatcher', () => {
     sinon.assert.notCalled(onChange);
   });
 
-  it('follows symlinks to the real config file', async () => {
+  it('follows symlinks to the real config file', {
+    skip: process.platform === 'win32' ?
+        'Windows requires Developer Mode or admin rights to create file symlinks' :
+        false,
+  }, async () => {
     using dir = createTempDir('cd4a-watcher-');
     using linkDir = createTempDir('cd4a-link-');
     const configPath = writeConfig(dir.path);
